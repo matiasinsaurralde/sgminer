@@ -33,7 +33,6 @@
 #include "algorithm/neoscrypt.h"
 #include "algorithm/whirlpoolx.h"
 #include "algorithm/lyra2re.h"
-#include "algorithm/pluck.h"
 
 #include "compat.h"
 
@@ -57,8 +56,7 @@ const char *algorithm_type_str[] = {
   "Whirlcoin",
   "Neoscrypt",
   "WhirlpoolX",
-  "Lyra2RE",
-  "Pluck"
+  "Lyra2RE"
 };
 
 void sha256(const unsigned char *message, unsigned int len, unsigned char *digest)
@@ -753,10 +751,6 @@ static algorithm_settings_t algos[] = {
   A_NEOSCRYPT("neoscrypt"),
 #undef A_NEOSCRYPT
 
-#define A_PLUCK(a) \
-  { a, ALGO_PLUCK, "", 1, 65536, 65536, 0, 0, 0xFF, 0xFFFF000000000000ULL, 0x0000ffffUL, 0, -1, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, pluck_regenhash, queue_pluck_kernel, gen_hash, append_neoscrypt_compiler_options }
-  A_PLUCK("pluck"),
-#undef A_PLUCK
   // kernels starting from this will have difficulty calculated by using quarkcoin algorithm
 #define A_QUARK(a, b) \
   { a, ALGO_QUARK, "", 256, 256, 256, 0, 0, 0xFF, 0xFFFFFFULL, 0x0000ffffUL, 0, 0, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, b, queue_sph_kernel, gen_hash, append_x11_compiler_options }
