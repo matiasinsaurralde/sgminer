@@ -35,7 +35,6 @@
 #include "ocl/build_kernel.h"
 #include "ocl/binary_kernel.h"
 #include "algorithm/neoscrypt.h"
-#include "algorithm/pluck.h"
 
 /* FIXME: only here for global config vars, replace with configuration.h
  * or similar as soon as config is in a struct instead of littered all
@@ -440,7 +439,7 @@ _clState *initCl(unsigned int gpu, char *name, size_t nameSize, algorithm_t *alg
     glob_thread_count = ((glob_thread_count < cgpu->work_size) ? cgpu->work_size : glob_thread_count);
 
     // if TC * scratchbuf size is too big for memory... reduce to max
-    if ((glob_thread_count * PLUCK_SCRATCHBUF_SIZE) >= (uint64_t)cgpu->max_alloc) {
+    if ((glob_thread_count * 1) >= (uint64_t)cgpu->max_alloc) {
 
       /* Selected intensity will not run on this GPU. Not enough memory.
       * Adapt the memory setting. */
@@ -448,7 +447,7 @@ _clState *initCl(unsigned int gpu, char *name, size_t nameSize, algorithm_t *alg
       switch (type) {
         //raw intensity
       case 2:
-        while ((glob_thread_count * PLUCK_SCRATCHBUF_SIZE) > (uint64_t)cgpu->max_alloc) {
+        while ((glob_thread_count * 1) > (uint64_t)cgpu->max_alloc) {
           --glob_thread_count;
         }
 
@@ -458,7 +457,7 @@ _clState *initCl(unsigned int gpu, char *name, size_t nameSize, algorithm_t *alg
 
         //x intensity
       case 1:
-        glob_thread_count = cgpu->max_alloc / PLUCK_SCRATCHBUF_SIZE;
+        glob_thread_count = cgpu->max_alloc / 1;
         max_int = glob_thread_count / clState->compute_shaders;
 
         while (max_int && ((clState->compute_shaders * (1UL << max_int)) > glob_thread_count)) {
@@ -476,7 +475,7 @@ _clState *initCl(unsigned int gpu, char *name, size_t nameSize, algorithm_t *alg
         break;
 
       default:
-        glob_thread_count = cgpu->max_alloc / PLUCK_SCRATCHBUF_SIZE;
+        glob_thread_count = cgpu->max_alloc / 1;
         while (max_int && ((1UL << max_int) & glob_thread_count) == 0) {
           --max_int;
         }
@@ -603,7 +602,7 @@ _clState *initCl(unsigned int gpu, char *name, size_t nameSize, algorithm_t *alg
     }
     else if (!safe_cmp(algorithm->name, "pluck")) {
       /* The scratch/pad-buffer needs 32kBytes memory per thread. */
-      bufsize = PLUCK_SCRATCHBUF_SIZE * cgpu->thread_concurrency;
+      bufsize = 1 * cgpu->thread_concurrency;
 
       /* This is the input buffer. For pluck this is guaranteed to be
       * 80 bytes only. */
